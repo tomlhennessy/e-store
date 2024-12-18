@@ -9,8 +9,8 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Parse request body
-    const body = JSON.parse(req.body);
+    // access request body
+    const body = req.body;
 
     // Validate lineItems
     if (!body.lineItems || body.lineItems.length === 0) {
@@ -31,11 +31,10 @@ export default async function handler(req, res) {
     });
 
     // Respond with session URL
-    res.status(200).json({ url: session.url });
+    res.status(200).json({ session: { url: session.url } });
   } catch (err) {
     // Log and return error response
     console.error(err);
     res.status(500).json({ message: 'Internal Server Error' });
   }
 }
-

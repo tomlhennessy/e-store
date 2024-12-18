@@ -1,5 +1,6 @@
 import Stripe from 'stripe';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 
 export async function getServerSideProps(context) {
   const stripe = new Stripe(process.env.STRIPE_SECRET ?? '', {
@@ -12,10 +13,7 @@ export async function getServerSideProps(context) {
       expand: ['data.product']
     });
 
-    console.log('Stripe response:', res);
-
     const prices = res.data.filter(price => price.active);
-    console.log('Filtered prices:', prices);
 
     return {
       props: { prices }
@@ -23,15 +21,52 @@ export async function getServerSideProps(context) {
   } catch (error) {
     console.error('Error fetching Stripe prices:', error);
     return {
-      props: { prices: [] } // Fallback to an empty array if there's an error
+      props: { prices: [] }
     };
   }
 }
 
 export default function Home({ prices }) {
+  const router = useRouter();
+
   if (!Array.isArray(prices)) {
     console.error('Prices is not an array or is undefined:', prices);
     return <div>Something went wrong. No prices available.</div>;
+  }
+
+  async function checkout(priceId) {
+    try {
+      const lineItems = [{
+        price: priceId,
+        quantity: 1
+      }];
+
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        body: JSON.stringify({ lineItems }),
+        headers: { 'Content-Type': 'application/json' }
+      });
+
+      if (!res.ok) {
+        console.error('Failed to create checkout session:', await res.text());
+        alert('Failed to create checkout session. Please try again.');
+        return;
+      }
+
+      const data = await res.json();
+      console.log('Checkout session data:', data);
+
+      if (!data.session?.url) {
+        console.error('Invalid session response:', data);
+        alert('Unexpected error. Please try again.');
+        return;
+      }
+
+      router.push(data.session.url);
+    } catch (error) {
+      console.error('Error during checkout:', error);
+      alert('Something went wrong. Please try again.');
+    }
   }
 
   return (
@@ -43,9 +78,15 @@ export default function Home({ prices }) {
       </Head>
       {prices.map(price => {
         const productName = price.product?.name || 'Unnamed Product';
-        return <div key={price.id}>{productName}</div>;
+        return (
+          <div
+            className='cursor-pointer'
+            key={price.id}
+            onClick={() => checkout(price.id)}>
+            {productName}
+          </div>
+        );
       })}
-      <button>CHECKOUT</button>
     </div>
   );
 }
