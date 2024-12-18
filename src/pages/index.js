@@ -45,7 +45,7 @@ export default function Home({ prices }) {
         const productName = price.product?.name || 'Unnamed Product';
         return <div key={price.id}>{productName}</div>;
       })}
+      <button>CHECKOUT</button>
     </div>
   );
 }
-
