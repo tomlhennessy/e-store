@@ -80,11 +80,7 @@ export default function Home({ prices }) {
       {prices.map(price => {
         const productName = price.product?.name || 'Unnamed Product';
         return (
-          <PurchaseCard
-            className='cursor-pointer'
-            key={price.id}>
-            {productName}
-          </PurchaseCard>
+          <PurchaseCard price={price} key={price.id} />
         );
       })}
     </div>
