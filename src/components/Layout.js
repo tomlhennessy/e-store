@@ -10,10 +10,10 @@ export default function Layout(props) {
         <Header />
 
         <div className='flex flex-col'>
-            <main className='flex-1'>
+            <main className='flex-1 py-5 sm:max-w-2/3 mx-auto'>
                 {children}
             </main>
-            <Footer /> 
+            <Footer />
         </div>
     </div>
   )
