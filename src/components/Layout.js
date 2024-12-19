@@ -6,13 +6,15 @@ export default function Layout(props) {
     const {children} = props
 
   return (
-    <div>
+    <div className='relative min-h-screen'>
         <Header />
 
-        <main>
-            {children}
-        </main>
-        <Footer />
+        <div className='flex flex-col'>
+            <main className='flex-1'>
+                {children}
+            </main>
+            <Footer /> 
+        </div>
     </div>
   )
 }
