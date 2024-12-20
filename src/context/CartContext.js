@@ -10,7 +10,7 @@ export function AppWrapper({children}) {
     }, [state, dispatch])
 
     useEffect(() => {
-        if JSON.parse(localStorage.getItem('mg-items')) {
+        if (JSON.parse(localStorage.getItem('mg-items'))) {
             dispatch({
                 type: 'load_items',
                 value: JSON.parse(localStorage.getItem('mg-items'))
