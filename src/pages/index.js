@@ -2,6 +2,8 @@ import Stripe from 'stripe';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import PurchaseCard from '@/components/PurchaseCard';
+import { useEffect } from 'react';
+import { useAppContext } from '@/context/CartContext';
 
 export async function getServerSideProps(context) {
   const stripe = new Stripe(process.env.STRIPE_SECRET ?? '', {
@@ -28,6 +30,7 @@ export async function getServerSideProps(context) {
 }
 
 export default function Home({ prices }) {
+  const { state, dispatch } = useAppContext()
   const router = useRouter();
 
   if (!Array.isArray(prices)) {
@@ -69,6 +72,13 @@ export default function Home({ prices }) {
       alert('Something went wrong. Please try again.');
     }
   }
+
+  useEffect(() => {
+    dispatch({
+      type: 'set_prices',
+      value: prices
+    })
+  }, [prices])
 
   return (
     <div>
