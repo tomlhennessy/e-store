@@ -4,7 +4,7 @@ import { AppReducer, initialState } from './AppReducer';
 const AppContext = createContext();
 
 export function AppWrapper({children}) {
-    const [state, dispatch] = useReducer(appReducer, initialState)
+    const [state, dispatch] = useReducer(AppReducer, initialState)
     const sharedState = useMemo(() => {
         return { state, dispatch }
     }, [state, dispatch])
@@ -22,5 +22,15 @@ export function AppWrapper({children}) {
         if (state !== initialState) {
             localStorage.setItem('mg-items', JSON.stringify(state))
         }
-    })
+    }, [state])
+
+    return (
+        <AppContext.Provider value={sharedState}>
+            {children}
+        </AppContext.Provider>
+    )
+}
+
+export function useAppContext() {
+    return useContext(AppContext)
 }
