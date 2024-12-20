@@ -49,15 +49,22 @@ export default function Description(props) {
 
           {/* Description Section */}
           <div className='flex flex-col justify-center max-w-md mx-auto'>
-              <h1 className='text-lg font-medium lg:text-2xl mb-4'>
-                  {product.product.name}
-              </h1>
+              <div className='flex justify-between items-center'>
+                <h1 className='text-lg font-medium lg:text-2xl mb-4'>
+                    {product.product.name}
+                </h1>
+                <p className='text-gray-800 text-medium lg:text-base mb-4'>${product.unit_amount/100}</p>
+              </div>
+
               <p className='text-gray-600 text-sm lg:text-base mb-6'>
                   {product.product.description || "No description available."}
               </p>
+
+              <hr className='my-4 border-t-2 border-gray-200' />
+
               <button
                   onClick={addToBasket(product)}
-                  className='bg-black text-white py-2 px-4 rounded hover:bg-grey-600 transition'
+                  className='bg-stone-800 text-white py-2 px-4 rounded hover:bg-green-500 transition'
               >
                   ADD TO BASKET
               </button>
