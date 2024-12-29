@@ -38,40 +38,7 @@ export default function Home({ prices }) {
     return <div>Something went wrong. No prices available.</div>;
   }
 
-  async function checkout(priceId) {
-    try {
-      const lineItems = [{
-        price: priceId,
-        quantity: 1
-      }];
-
-      const res = await fetch('/api/checkout', {
-        method: 'POST',
-        body: JSON.stringify({ lineItems }),
-        headers: { 'Content-Type': 'application/json' }
-      });
-
-      if (!res.ok) {
-        console.error('Failed to create checkout session:', await res.text());
-        alert('Failed to create checkout session. Please try again.');
-        return;
-      }
-
-      const data = await res.json();
-      console.log('Checkout session data:', data);
-
-      if (!data.session?.url) {
-        console.error('Invalid session response:', data);
-        alert('Unexpected error. Please try again.');
-        return;
-      }
-
-      router.push(data.session.url);
-    } catch (error) {
-      console.error('Error during checkout:', error);
-      alert('Something went wrong. Please try again.');
-    }
-  }
+  
 
   useEffect(() => {
     dispatch({
@@ -79,6 +46,7 @@ export default function Home({ prices }) {
       value: prices
     })
   }, [prices])
+  console.log(prices)
 
   return (
     <div>
