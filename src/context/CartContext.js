@@ -20,9 +20,13 @@ export function AppWrapper({children}) {
 
     useEffect(() => {
         if (state !== initialState) {
-            localStorage.setItem('mg-items', JSON.stringify(state))
+            localStorage.setItem('mg-items', JSON.stringify({
+                prices: state.prices,
+                products: state.products
+            }));
         }
-    }, [state])
+    }, [state]);
+
 
     return (
         <AppContext.Provider value={sharedState}>

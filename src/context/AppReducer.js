@@ -5,34 +5,42 @@ export const initialState = {
 
 export const AppReducer = (state = initialState, action) => {
     switch (action.type) {
-        case "add_product": { // id
+        case "add_product": { // Add or increment product
+            const productId = action.value;
             return {
                 ...state,
                 products: {
                     ...state.products,
-                    [action.value]: 1
+                    [productId]: (state.products[productId] || 0) + 1 // Increment or initialize quantity
                 }
-            }
+            };
         }
-        case "remove_product": {
+
+        case "remove_product": { // Remove product completely
+            const productId = action.value;
+            const { [productId]: removed, ...remainingProducts } = state.products;
             return {
                 ...state,
-                products: Object.keys(state.products).reduce((acc, curr) => {
-                    if (curr !== action.value) {
-                        return {...acc, [curr]: state.products[curr]}
-                    }
-                    return acc
-                }, {})
-            }
+                products: remainingProducts
+            };
         }
-        case "vary_count": { // [id, newCount]
+
+        case "vary_count": { // Update quantity directly
+            const [productId, count] = action.value;
+            if (count <= 0) {
+                const { [productId]: removed, ...remainingProducts } = state.products;
+                return {
+                    ...state,
+                    products: remainingProducts
+                };
+            }
             return {
                 ...state,
                 products: {
                     ...state.products,
-                    [action.value[0]]: action.value[1]
+                    [productId]: count
                 }
-            }
+            };
         }
         case "load_items": {
             return {
