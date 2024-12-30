@@ -38,7 +38,7 @@ export default function Home({ prices }) {
     return <div>Something went wrong. No prices available.</div>;
   }
 
-  
+
 
   useEffect(() => {
     dispatch({
@@ -49,18 +49,18 @@ export default function Home({ prices }) {
   console.log(prices)
 
   return (
-    <div>
+    <div className="max-w-7xl mx-auto px-6 py-10">
       <Head>
-        <title>Create Next App</title>
+        <title>Tom's Apparel</title>
         <meta name="description" content="content"></meta>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {prices.map(price => {
-        const productName = price.product?.name || 'Unnamed Product';
-        return (
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {prices.map(price => (
           <PurchaseCard price={price} key={price.id} />
-        );
-      })}
+        ))}
+      </div>
     </div>
   );
 }
