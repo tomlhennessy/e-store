@@ -24,12 +24,13 @@ export default function Description(props) {
         return <div>Product not found or missing data</div>;
     }
 
-    function addToBasket(prod, size) {
+    function addToBasket(prod) {
         return () => {
             dispatch({
                 type: 'add_product',
                 value: prod.id
             });
+            
         };
     }
 
